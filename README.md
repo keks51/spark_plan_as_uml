@@ -1,4 +1,4 @@
-# spark plan visualization as UML diagram
+# visualizing spark plan as UML diagram
 
 A library for drawing spark logic plan as UML.
 Using PlantUML.
