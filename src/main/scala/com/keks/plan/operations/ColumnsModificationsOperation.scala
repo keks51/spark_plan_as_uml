@@ -15,13 +15,9 @@ case class ColumnsModificationsOperation(project: Project) extends PlanOperation
 
   override val operationName = COLUMNS_MODIFICATIONS
 
-  override val operationText ={
-    val res = project
+  override val operationText = project
       .projectList
       .filterNot(_.isInstanceOf[AttributeReference])
       .map(toPrettyExpression(_, None, withoutTableName = true))
       .mkString("\n")
-    res
-  }
-
 }

@@ -1,6 +1,6 @@
 package com.keks.plan.operations
 
-import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
+import org.apache.spark.sql.catalyst.analysis.{UnresolvedAlias, UnresolvedAttribute}
 import org.apache.spark.sql.catalyst.expressions._
 import org.apache.spark.sql.catalyst.expressions.aggregate._
 import org.apache.spark.sql.catalyst.plans.logical.{LocalRelation, LogicalPlan, Project}
@@ -196,6 +196,10 @@ trait PlanOperation {
         s"DateDiff[endDate=${defaultPretty(endDate)}, startDate=${defaultPretty(startDate)}]"
       case DateAdd(startDate, days) =>
         s"DateAdd[date=${defaultPretty(startDate)}, daysToAdd=${defaultPretty(days)}]"
+      case Lower(child) =>
+        s"Lower[${defaultPretty(child)}]"
+      case UnresolvedAlias(child, _) =>
+        defaultPretty(child)
     }
   }
 

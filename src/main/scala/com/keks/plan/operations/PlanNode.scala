@@ -1,5 +1,6 @@
 package com.keks.plan.operations
 
+import org.apache.spark.sql.catalyst.analysis.UnresolvedAlias
 import org.apache.spark.sql.catalyst.expressions.AttributeReference
 import org.apache.spark.sql.catalyst.plans.logical._
 import org.apache.spark.sql.execution.LogicalRDD
@@ -46,6 +47,8 @@ case class PlanNode(parentPlanId: Int,
         // if project contains only AttributeReferences then this plan is just a projection before join or smth else
       } else if (operation.projectList.forall(_.isInstanceOf[AttributeReference])){
         SkipOperation()
+      } else if (operation.projectList.forall(_.isInstanceOf[UnresolvedAlias])) {
+        SelectOperation(operation)
       } else {
         ColumnsModificationsOperation(operation)
       }
