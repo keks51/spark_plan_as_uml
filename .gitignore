@@ -1,0 +1,12 @@
+.gitlab-ci.yml
+.idea/
+*.iml
+/*/target/
+*.class
+dice-spark/dependency-reduced-pom.xml
+integration-tests/ingestion-tests/test-output/
+.DS_Store
+*.retry
+*.log
+*.pyc
+metastore_db/

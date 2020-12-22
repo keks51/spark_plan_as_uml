@@ -1,0 +1,15 @@
+package com.keks.plan
+
+package object operations {
+  val FILTER = "FILTER"
+  val WINDOW = "WINDOW"
+  val DEDUPLICATE = "DEDUPLICATE"
+  val JOIN = "JOIN"
+  val UNION = "UNION"
+  val AGGREGATE = "AGGREGATE"
+  val COLUMNS_MODIFICATIONS = "COLUMNS_MODIFICATIONS"
+  val SCHEMA = "SCHEMA"
+  val SOURCE_TABLE = "SOURCE_TABLE"
+  val NAMED_SOURCE_TABLE = "NAMED_SOURCE_TABLE"
+  val SKIP_OPERATION = "SKIP_OPERATION"
+}
