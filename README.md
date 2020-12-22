@@ -1,11 +1,11 @@
 # visualizing spark plan as UML diagram
 
-A library for drawing spark logic plan as UML.
+A library for drawing spark logic plan as UML.\
 Using PlantUML.
 
 ## Requirements
-spark 2.4.0 or higher
-for lower spark version some code changes should be applied
+spark 2.4.0 or higher\
+for lower spark version some code changes should be applied\
 Not tested with Datasets
 ## Examples
 
