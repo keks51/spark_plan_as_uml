@@ -1,7 +1,7 @@
 package com.keks.plan.operations
 
-import com.keks.plan.{INV, INV3, StringOps}
 import com.keks.plan.parser.ExpressionParser
+import com.keks.plan.{INV, INV3, StringOps}
 import org.apache.spark.sql.catalyst.expressions.AttributeReference
 import org.apache.spark.sql.catalyst.plans.logical.Aggregate
 
