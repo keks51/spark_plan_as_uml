@@ -106,6 +106,7 @@ object SparkPlanParser {
     classOf[LogicalRelation].getName,
     classOf[LogicalRDD].getName,
     classOf[Repartition].getName,
+    classOf[MapPartitions].getName,
     classOf[ResolvedHint].getName,
     classOf[SerializeFromObject].getName)
 

@@ -19,6 +19,8 @@ trait PlanOperation {
   /* Invisible space character */
   val INV: String = Character.toString(10240)
   val INV3: String = s"$INV$INV$INV"
+  val INV6: String = s"$INV3$INV3"
+  val INV9: String = s"$INV6$INV3"
 
   /* like join, filter... */
   val operationName: String
@@ -91,8 +93,8 @@ trait PlanOperation {
       case Cast(child, dataType, _) => s"${toPrettyExpression(child, rootPlan, isDataSource, withoutTableName)} cast[$dataType]"
       case WindowExpression(windowFunction, windowSpec) =>
         val windowFunc = s"${toPrettyExpression(windowFunction, rootPlan, isDataSource, withoutTableName)}"
-        val partSpec = s"$INV$INV$INV PARTITION BY [${windowSpec.partitionSpec.map(toPrettyExpression(_, rootPlan, isDataSource, withoutTableName)).mkString(", ")}] "
-        val orderSpec = s"$INV$INV$INV ORDER BY ${windowSpec.orderSpec.map(toPrettyExpression(_, rootPlan, isDataSource, withoutTableName)).mkString(", ")}"
+        val partSpec = s"$INV3 PARTITION BY [${windowSpec.partitionSpec.map(toPrettyExpression(_, rootPlan, isDataSource, withoutTableName)).grouped(4).mkString(s"\n$INV9")}] "
+        val orderSpec = s"$INV3 ORDER BY ${windowSpec.orderSpec.map(toPrettyExpression(_, rootPlan, isDataSource, withoutTableName)).grouped(4).mkString(s"\n$INV9")}"
         s"$windowFunc OVER [\n$partSpec \n$orderSpec]"
       case rowNumber: RowNumber => rowNumber.prettyName.toUpperCase
       case SortOrder(child, direction, nullOrdering, _) =>
@@ -152,7 +154,6 @@ trait PlanOperation {
       case Coalesce(children) =>
         s"coalesce[${children.map(defaultPretty)}]"
       case ParseToTimestamp(left, _, _) =>
-        println("here2")
         s"to_timestamp[${defaultPretty(left)}]"
       case x: UnresolvedAttribute =>
         s"${x.name}"
@@ -200,6 +201,20 @@ trait PlanOperation {
         s"Lower[${defaultPretty(child)}]"
       case UnresolvedAlias(child, _) =>
         defaultPretty(child)
+      case ArrayContains(left, right) =>
+        s"${defaultPretty(left)} ArrayContains[${defaultPretty(right)}]"
+      case Subtract(left, right) =>
+        s"${defaultPretty(left)} - ${defaultPretty(right)}"
+      case Add(left, right) =>
+        s"${defaultPretty(left)} + ${defaultPretty(right)}"
+      case Multiply(left, right) =>
+        s"${defaultPretty(left)} * ${defaultPretty(right)}"
+      case Round(child, scale) =>
+        s"Round[${defaultPretty(child)}, scale=${defaultPretty(scale)}]"
+      case Concat(children) =>
+        s"Concat[${children.map(defaultPretty).mkString(", ")}]"
+      case MonthsBetween(date1, date2, roundOff, _) =>
+        s"MonthsBetween[date1=${defaultPretty(date1)}, date2=${defaultPretty(date2)}, roundOff=${defaultPretty(roundOff)}]"
     }
   }
 
@@ -212,7 +227,7 @@ trait PlanOperation {
     case child: Project => detectDataSource(child.child)
     case _: LocalRelation => Some("GENERATED TABLE", Seq.empty)
     case _: LogicalRDD => Some("GENERATED TABLE", Seq.empty)
-    case LogicalRelation(relation, _, _) =>
+    case LogicalRelation(relation, _, _, _) =>
       relation match {
         case HadoopFsRelation(location, _, _, _, fileFormat, _) =>
           val formatStr: String = fileFormat match {
