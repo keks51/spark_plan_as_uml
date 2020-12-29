@@ -1,6 +1,10 @@
 package com.keks
 
-import com.keks.plan.parser.{DefaultExpressionParser, ExpressionParser}
+import com.keks.plan.builder.DiagramBuilder
+import com.keks.plan.operations.PlanNode
+import com.keks.plan.parser.{DefaultExpressionParser, ExpressionParser, SparkPlanParser}
+import com.keks.plan.write.PlanSaver
+import com.keks.plan.write.types.PlanType
 import org.apache.spark.sql.Dataset
 
 
@@ -17,17 +21,20 @@ package object plan {
     */
   implicit class ParserImp[T](x: Dataset[T]) {
 
-    def printPlanAsUml(entityName: String,
-                       reportDescription: String,
-                       savePath: String,
-                       parser: ExpressionParser = new DefaultExpressionParser,
-                       pngLimitSize: Int = 12288): Unit = {
-      SparkUmlDiagram.buildAndSaveReport(entityName = entityName,
-                                         reportDescription = reportDescription,
-                                         pngLimitSize = pngLimitSize,
-                                         savePath = savePath,
-                                         plan = x.queryExecution.logical,
-                                         parser = parser)
+    def printPlan[S <: PlanType](entityName: String,
+                                reportDescription: String,
+                                savePath: String,
+                                parser: ExpressionParser = new DefaultExpressionParser,
+                                builder: DiagramBuilder[S],
+                                saver: PlanSaver[S]): Unit = {
+      val planNodes: Seq[PlanNode] = SparkPlanParser(x.queryExecution.logical)(parser).parse()
+      val edges: Seq[(Int, Int)] = SparkPlanParser.getEdges(planNodes)
+      val data: S = builder.build(savePath = savePath,
+                                  entityName = entityName,
+                                  reportDescription = reportDescription,
+                                  planNodes = planNodes,
+                                  edges = edges)
+      saver.save(data, savePath, entityName)
     }
 
   }
@@ -45,6 +52,7 @@ package object plan {
     def groupedBy(size: Int): Seq[String] = {
       seq.grouped(size).map(_.mkString(",")).toSeq
     }
+
   }
 
 }

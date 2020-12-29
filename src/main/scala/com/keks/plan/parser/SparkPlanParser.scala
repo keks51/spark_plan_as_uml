@@ -1,8 +1,7 @@
-package com.keks.plan
+package com.keks.plan.parser
 
-import com.keks.plan.SparkPlanParser.{defaultExcludeList, getEdges}
 import com.keks.plan.operations.{PlanNode, SKIP_OPERATION}
-import com.keks.plan.parser.ExpressionParser
+import com.keks.plan.parser.SparkPlanParser.{defaultExcludeList, getEdges}
 import org.apache.spark.sql.catalyst.plans.logical._
 import org.apache.spark.sql.execution.LogicalRDD
 import org.apache.spark.sql.execution.datasources.LogicalRelation
