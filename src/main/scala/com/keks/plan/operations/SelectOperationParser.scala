@@ -1,5 +1,6 @@
 package com.keks.plan.operations
 
+import com.keks.plan.parser.ExpressionParser
 import org.apache.spark.sql.catalyst.plans.logical.Project
 
 
@@ -9,13 +10,13 @@ import org.apache.spark.sql.catalyst.plans.logical.Project
   *   .select(a, b)
   * }}}
   */
-case class SelectOperation(project: Project) extends PlanOperation {
+case class SelectOperationParser(project: Project)(implicit parser: ExpressionParser) extends PlanOperation {
 
   override val operationName = SELECT
 
   override val operationText = project
     .projectList
-    .map(toPrettyExpression(_, None, withoutTableName = true))
+    .map(parser.toPrettyExpression(_, None, withoutTableName = true))
     .mkString("\n")
 
 }

@@ -1,5 +1,6 @@
 package com.keks.plan.operations
 
+import com.keks.plan.parser.ExpressionParser
 import org.apache.spark.sql.catalyst.plans.logical.Join
 
 
@@ -9,12 +10,12 @@ import org.apache.spark.sql.catalyst.plans.logical.Join
   *   .join(rightDF, Seq(id), inner)
   * }}}
   */
-case class JoinOperation(join: Join) extends PlanOperation {
+case class JoinOperationParser(join: Join)(implicit parser: ExpressionParser) extends PlanOperation {
 
   override val operationName = JOIN
 
   val operationText =
     join.joinType.sql.toUpperCase + "\n" +
-      join.condition.map(toPrettyExpression(_, Some(join), withoutTableName = false)).getOrElse("UNKNOWN CONDITION")
+      join.condition.map(parser.toPrettyExpression(_, Some(join), withoutTableName = false)).getOrElse("UNKNOWN CONDITION")
 
 }
