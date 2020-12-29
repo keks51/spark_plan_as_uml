@@ -1,5 +1,7 @@
 package com.keks.plan.operations
 
+import com.keks.plan.StringOps
+import com.keks.plan.parser.ExpressionParser
 import org.apache.spark.sql.catalyst.plans.logical.Deduplicate
 
 
@@ -11,7 +13,7 @@ import org.apache.spark.sql.catalyst.plans.logical.Deduplicate
   *   .dropDuplicates(...)
   * }}}
   */
-case class DistinctOperation(deduplicate: Deduplicate) extends PlanOperation {
+case class DistinctOperationParser(deduplicate: Deduplicate)(implicit parser: ExpressionParser) extends PlanOperation {
 
   val columns = deduplicate.keys.map(_.name)
 

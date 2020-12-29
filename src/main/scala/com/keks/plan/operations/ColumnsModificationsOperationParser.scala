@@ -1,5 +1,6 @@
 package com.keks.plan.operations
 
+import com.keks.plan.parser.ExpressionParser
 import org.apache.spark.sql.catalyst.expressions.AttributeReference
 import org.apache.spark.sql.catalyst.plans.logical.Project
 
@@ -11,13 +12,13 @@ import org.apache.spark.sql.catalyst.plans.logical.Project
   *   .withColumn(NAME_IS_NULL, when(col(NAME).isNull, true).otherwise(lit(false)))
   * }}}
   */
-case class ColumnsModificationsOperation(project: Project) extends PlanOperation {
+case class ColumnsModificationsOperationParser(project: Project)(implicit parser: ExpressionParser) extends PlanOperation {
 
   override val operationName = COLUMNS_MODIFICATIONS
 
   override val operationText = project
       .projectList
       .filterNot(_.isInstanceOf[AttributeReference])
-      .map(toPrettyExpression(_, None, withoutTableName = true))
+      .map(parser.toPrettyExpression(_, None, withoutTableName = true))
       .mkString("\n")
 }

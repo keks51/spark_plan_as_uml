@@ -2,6 +2,7 @@ package com.keks.plan
 
 import com.keks.plan.SparkPlanParser.{defaultExcludeList, getEdges}
 import com.keks.plan.operations.{PlanNode, SKIP_OPERATION}
+import com.keks.plan.parser.ExpressionParser
 import org.apache.spark.sql.catalyst.plans.logical._
 import org.apache.spark.sql.execution.LogicalRDD
 import org.apache.spark.sql.execution.datasources.LogicalRelation
@@ -15,7 +16,8 @@ import java.util.concurrent.atomic.AtomicInteger
   * @param rootPlan             spark plan
   * @param excludeSparkNodesSeq list of spark plans to exclude like (DeserializeToObject)
   */
-class SparkPlanParser(rootPlan: LogicalPlan, excludeSparkNodesSeq: Seq[String] = defaultExcludeList) {
+class SparkPlanParser(rootPlan: LogicalPlan,
+                      excludeSparkNodesSeq: Seq[String] = defaultExcludeList)(implicit parser: ExpressionParser) {
 
   /* unique operation id */
   private val id = new AtomicInteger(1)
@@ -111,7 +113,7 @@ object SparkPlanParser {
     classOf[SerializeFromObject].getName)
 
   def apply(rootPlan: LogicalPlan,
-            excludeSparkNodesSeq: Seq[String] = defaultExcludeList): SparkPlanParser =
+            excludeSparkNodesSeq: Seq[String] = defaultExcludeList)(implicit parser: ExpressionParser): SparkPlanParser =
     new SparkPlanParser(rootPlan, excludeSparkNodesSeq)
 
   /**

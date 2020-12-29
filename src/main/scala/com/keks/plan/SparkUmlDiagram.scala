@@ -1,6 +1,7 @@
 package com.keks.plan
 
 import com.keks.plan.operations.PlanNode
+import com.keks.plan.parser.ExpressionParser
 import net.sourceforge.plantuml.SourceStringReader
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 
@@ -29,8 +30,9 @@ object SparkUmlDiagram {
                          reportDescription: String,
                          plan: LogicalPlan,
                          savePath: String,
-                         pngLimitSize: Int = 12288): Unit = {
-    val strUml: String = buildReport(entityName, reportDescription, plan, pngLimitSize)
+                         pngLimitSize: Int = 12288,
+                         parser: ExpressionParser): Unit = {
+    val strUml: String = buildReport(entityName, reportDescription, plan, pngLimitSize)(parser)
     val outputPath = new File(savePath)
     outputPath.mkdirs()
     val reader = new SourceStringReader(strUml)
@@ -50,7 +52,7 @@ object SparkUmlDiagram {
   private def buildReport(entityName: String,
                           reportDescription: String,
                           plan: LogicalPlan,
-                          pngLimitSize: Int = 12288): String = {
+                          pngLimitSize: Int = 12288)(implicit parser: ExpressionParser): String = {
     System.setProperty("PLANTUML_LIMIT_SIZE", pngLimitSize.toString)
 
     val planNodes: Seq[PlanNode] = SparkPlanParser(plan).parse()

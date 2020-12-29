@@ -1,5 +1,6 @@
 package com.keks.plan.operations
 
+import com.keks.plan.parser.ExpressionParser
 import org.apache.spark.sql.catalyst.plans.logical.MapElements
 
 
@@ -9,7 +10,7 @@ import org.apache.spark.sql.catalyst.plans.logical.MapElements
   *   .as[UserClass].map(identity)
   * }}}
   */
-case class MapElementsOperation(mapElements: MapElements) extends PlanOperation {
+case class MapElementsOperationParser(mapElements: MapElements)(implicit parser: ExpressionParser) extends PlanOperation {
 
   override val operationName = SCHEMA
 
