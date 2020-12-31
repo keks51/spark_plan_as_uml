@@ -1,4 +1,5 @@
 # visualizing spark plan as UML diagram
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.keks51/spark-plan-as-uml/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.keks51/spark-plan-as-uml)  
 
 A library for drawing spark logic plan as UML.\
 Using PlantUML.
