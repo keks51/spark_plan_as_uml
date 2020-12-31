@@ -117,7 +117,18 @@ result.printPlan(parser = new DefaultExpressionParser,
   ]
 }
 ```
-
+Use pretty prints
+```scala
+.printAsUml(
+  entityName = "rooms",
+  "find all rooms where 'alex' users live with phone_number starting with '+7952'",
+  savePath = "examples")
+  
+.printAsJson(
+  entityName = "rooms",
+  "find all rooms where 'alex' users live with phone_number starting with '+7952'",
+  savePath = "examples")
+```
 ## NOTICE
 
 In case of not implemented errors in DefaultExpressionParser or incorrect behavior you can extend, override and change
