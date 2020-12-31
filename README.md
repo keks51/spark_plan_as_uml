@@ -9,6 +9,14 @@ spark 2.4.0 or higher\
 for lower spark version some code changes should be applied\
 Not tested with Datasets
 
+## MAVEN
+```xml
+<dependency>
+    <groupId>io.github.keks51</groupId>
+    <artifactId>spark-plan-as-uml</artifactId>
+    <version>1.0.6</version>
+</dependency>
+```
 ## Examples
 
 Room code example
