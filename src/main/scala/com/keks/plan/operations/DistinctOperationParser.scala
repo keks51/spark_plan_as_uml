@@ -1,6 +1,6 @@
 package com.keks.plan.operations
 
-import com.keks.plan.StringOps
+import com.keks.plan.implicits.StringOps
 import com.keks.plan.parser.ExpressionParser
 import org.apache.spark.sql.catalyst.plans.logical.Deduplicate
 

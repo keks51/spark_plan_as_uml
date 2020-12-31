@@ -1,8 +1,9 @@
 package com.keks.plan
 
-import com.keks.plan.builder.{JsonDiagramBuilder, PlanUmlDiagramBuilder}
+import com.keks.plan.builder.PlanUmlDiagramBuilder
+import com.keks.plan.implicits._
 import com.keks.plan.parser.DefaultExpressionParser
-import com.keks.plan.write.{LocalFilePlanSaver, UmlPlanSaver}
+import com.keks.plan.write.UmlPlanSaver
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.IntegerType
 import utils.TestBase
@@ -11,9 +12,6 @@ import utils.TestBase
 class SparkPlanParserTest extends TestBase {
 
   import spark.implicits._
-
-
-  implicit val exprParser: DefaultExpressionParser = new DefaultExpressionParser
 
   "SparkUmlDiagram" should "build report" in {
     val users = Seq(("a", "b", "a", "a", "a", "a", "a", "a"))
@@ -27,7 +25,7 @@ class SparkPlanParserTest extends TestBase {
       .join(filteredManagers, col("user_id") =!= col("manager_user_id"))
       .as[User]
       .map(identity)
-      .printPlan(parser = new DefaultExpressionParser,
+      .printPlan(parser = new DefaultExpressionParser(),
                  builder = new PlanUmlDiagramBuilder(),
                  entityName = s"_super_new_orders2",
                  reportDescription = "",
@@ -55,12 +53,16 @@ class SparkPlanParserTest extends TestBase {
 //                       reportDescription = "find all rooms where 'alex' users live with phone_number starting with '+7952'",
 //                       savePath = "examples",
 //                       saver = new UmlPlanSaver())
-      .printPlan(parser = new DefaultExpressionParser,,
-                 builder = new JsonDiagramBuilder(),
-                 entityName = s"rooms",
-                 reportDescription = "find all rooms where 'alex' users live with phone_number starting with '+7952'",
-                 savePath = "examples",
-                 saver = new LocalFilePlanSaver())
+//      .printPlan(parser = new DefaultExpressionParser,
+//                 builder = new JsonDiagramBuilder(),
+//                 entityName = s"rooms",
+//                 reportDescription = "find all rooms where 'alex' users live with phone_number starting with '+7952'",
+//                 savePath = "examples",
+//                 saver = new LocalFilePlanSaver())
+      .printAsJson(
+        entityName = "rooms",
+        "find all rooms where 'alex' users live with phone_number starting with '+7952'",
+        savePath = "examples")
   }
 
 }
