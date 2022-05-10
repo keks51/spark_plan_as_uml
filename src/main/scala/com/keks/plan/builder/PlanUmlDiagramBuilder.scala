@@ -1,6 +1,6 @@
 package com.keks.plan.builder
 
-import com.keks.plan.operations.PlanNode
+import com.keks.plan.parser.TransformationPlanNode
 import com.keks.plan.write.types.PlantUmlPlanType
 
 
@@ -18,7 +18,7 @@ class PlanUmlDiagramBuilder(pngLimitSize: Int = 12288) extends DiagramBuilder[Pl
   def build(entityName: String,
             reportDescription: String,
             savePath: String,
-            planNodes: Seq[PlanNode],
+            planNodes: Seq[TransformationPlanNode],
             edges: Seq[(Int, Int)]): PlantUmlPlanType = {
     System.setProperty("PLANTUML_LIMIT_SIZE", pngLimitSize.toString)
     val umlNodes = getUmlNodes(planNodes)
@@ -37,11 +37,11 @@ class PlanUmlDiagramBuilder(pngLimitSize: Int = 12288) extends DiagramBuilder[Pl
     PlantUmlPlanType(res)
   }
 
-  private def getUmlNodes(nodes: Seq[PlanNode]): Seq[String] = {
+  private def getUmlNodes(nodes: Seq[TransformationPlanNode]): Seq[String] = {
     nodes.map { node =>
       val id = node.id
-      val name = node.planOperation.operationName
-      val desc = node.planOperation.operationText
+      val name = node.transformationLogic.transformationName
+      val desc = node.transformationLogic.transformationText
       val umlName = s"${id}_$name"
       s"""class $umlName <<(E,ortho)>> {
          |$desc
@@ -52,12 +52,12 @@ class PlanUmlDiagramBuilder(pngLimitSize: Int = 12288) extends DiagramBuilder[Pl
   }
 
   private def getUmlEdges(edges: Seq[(Int, Int)],
-                          nodes: Seq[PlanNode], entityName: String): Seq[String] = {
+                          nodes: Seq[TransformationPlanNode], entityName: String): Seq[String] = {
     edges.map { edge =>
       val fromNodeId = edge._1
       val toNodeId = edge._2
-      val fromNodeName = nodes.find(_.id == fromNodeId).get.planOperation.operationName
-      val toNodeName = nodes.find(_.id == toNodeId).orElse(throw new Exception(s"Cannot find $toNodeId")).get.planOperation.operationName
+      val fromNodeName = nodes.find(_.id == fromNodeId).get.transformationLogic.transformationName
+      val toNodeName = nodes.find(_.id == toNodeId).orElse(throw new Exception(s"Cannot find $toNodeId")).get.transformationLogic.transformationName
       val umlFrom = s"${fromNodeId}_$fromNodeName"
       if (fromNodeId == 1) {
         s"""$entityName||--|| $umlFrom

@@ -1,0 +1,3 @@
+policy_number	term_number	cancelled_date	period_end	model_date	model_number
+pol1	term1	NULL	2021-01-01	2021-01-01	mod1
+pol2	term2	NULL	2021-01-01	2021-01-01	mod2

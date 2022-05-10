@@ -1,7 +1,7 @@
 package com.keks.plan.parser
 
 import com.keks.plan.{INV, INV3, INV9}
-import org.apache.spark.sql.catalyst.analysis.{UnresolvedAlias, UnresolvedAttribute}
+import org.apache.spark.sql.catalyst.analysis.{UnresolvedAlias, UnresolvedAttribute, UnresolvedFunction, UnresolvedStar}
 import org.apache.spark.sql.catalyst.expressions._
 import org.apache.spark.sql.catalyst.expressions.aggregate._
 import org.apache.spark.sql.catalyst.plans.logical.{LocalRelation, LogicalPlan, Project}
@@ -10,6 +10,7 @@ import org.apache.spark.sql.execution.datasources.csv.CSVFileFormat
 import org.apache.spark.sql.execution.datasources.json.JsonFileFormat
 import org.apache.spark.sql.execution.datasources.parquet.ParquetFileFormat
 import org.apache.spark.sql.execution.datasources.{HadoopFsRelation, LogicalRelation}
+import org.apache.spark.sql.types.DataType
 
 
 /**
@@ -244,6 +245,20 @@ class DefaultExpressionParser extends ExpressionParser {
         s"Concat[${children.map(defaultPretty).mkString(", ")}]"
       case MonthsBetween(date1, date2, roundOff, _) =>
         s"MonthsBetween[date1=${defaultPretty(date1)}, date2=${defaultPretty(date2)}, roundOff=${defaultPretty(roundOff)}]"
+      case UnresolvedFunction(name, children, isDistinct) =>
+        s"$name[${children.map(defaultPretty).mkString(", ")}]"
+      case UnaryMinus(child) =>
+        s"-[${defaultPretty(child)}]"
+      case UnaryPositive(child) =>
+        s"+[${defaultPretty(child)}]"
+      case UnresolvedStar(target) =>
+       s"${target.head}.*"
+      case Average(child) =>
+        s"avg[${defaultPretty(child)}]"
+      case x =>
+        val y = x
+        println("Unknown")
+        null
     }
   }
 

@@ -1,0 +1,3 @@
+id	module	description	dimension	severity	validators	target	hash	created_time	last_usage_time
+to_be_denied_as_modified
+to_be_accepted_as_not_modified	GL_DATA_QUALITY_GATES	test	test	HIGH	[{\n  'tag': 'notMissing'\n}]	{\n  'objects': [{\n    'database': 'test_db',\n    'dataset': 'billing_bc_account_hive_tb',\n    'field': 'delinquency_status'\n  }],\n  'typ': 'HIVE'\n}	a2886bdf5b3c14e629fc5fe9f3b86ea9	1970-01-01 00:00:00.001

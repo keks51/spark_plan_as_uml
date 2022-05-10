@@ -6,7 +6,7 @@
 
     <groupId>io.github.keks51</groupId>
     <artifactId>spark-plan-as-uml</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
 
     <name>spark-plan-as-uml</name>
     <description>visualizing spark plan as UML diagram</description>

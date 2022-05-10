@@ -1,0 +1,9 @@
+policy_number	term_number	processed_date	producer_code_of_record_code	gl_account_number	job_source	accounting_entry_type	gl_amount_amt	accounting_date
+p1	t1	2021-05-11 09:07:34	1	4115	WRITTEN PREMIUMS	CR	1	2021-05-12 09:07:34
+p2	t2	2021-05-11 09:07:34	2	4115	WRITTEN PREMIUMS	CR	2	2021-05-12 09:07:34
+p3	t3	2021-05-11 09:07:34	3	4115	WRITTEN PREMIUMS	CR	3	2021-05-12 09:07:34
+p4	t4	2021-04-11 09:07:34	4	4115	WRITTEN PREMIUMS	CR	4	2021-05-12 09:07:34
+p1	t1	2021-05-11 09:07:34	1	2312	Commission	CR	1	2021-05-12 09:07:34
+p2	t2	2021-05-11 09:07:34	2	2312	Commission	CR	2	2021-05-12 09:07:34
+p3	t3	2021-05-11 09:07:34	3	2312	Commission	CR	3	2021-05-12 09:07:34
+p4	t4	2021-04-11 09:07:34	4	2312	Commission	CR	4	2021-05-12 09:07:34
