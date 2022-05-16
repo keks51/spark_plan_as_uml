@@ -1,6 +1,0 @@
-effective_start_date	effective_end_date	coverage_pattern_code	rsp	vehicle_type	class_of_business_code
-2015-01-01	9999-01-01	PAUMPDCov		auto	21
-2015-01-01	9999-01-01	PAPropProtectionCov		auto	21
-2015-01-01	9999-01-01	PAPIP_DependantCare_ECO		auto	22
-2015-01-01	9999-01-01	PAComprehensiveCov		auto	23
-2015-01-01	9999-01-01	PAComprehensiveCov		NULL	23

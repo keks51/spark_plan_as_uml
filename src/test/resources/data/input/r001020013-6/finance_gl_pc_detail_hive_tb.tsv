@@ -1,7 +1,0 @@
-policy_number	term_number	producer_code_of_record_code	accounting_entry_type	gl_amount_amt	gl_account_number	job_source	accounting_date	processed_date
-pol1	term1	prodc1	DR	1.0	5312	Commission	2021-12-31	2021-05-11
-pol1	term1	prodc1	DR	2.0	5312	Commission	2021-12-31	2021-05-11
-pol1	term1	prodc1	DR	1.0	5312	Commission	2021-12-31	2021-05-11
-pol1	term1	prodc1	DR	2.0	5312	Commission	2021-12-31	2021-05-11
-pol2	term2	prodc2	DR	1.0	5312	Commission	2021-12-31	2021-05-11
-pol2	term2	prodc2	CR	1.0	5318	Commission	2021-12-31	2021-05-11
