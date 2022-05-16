@@ -1,6 +1,0 @@
-0) finish code to get correct case class fields which is out of map or flatMap function
-1) Test columns modification with different inputs
-2) Store unique columns number for future optimizations
-3) Try to change text color.  For example data types color
-4) test unknown source
-5) split long line by several lines
