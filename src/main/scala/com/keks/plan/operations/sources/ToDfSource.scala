@@ -12,7 +12,7 @@ case class ToDfSource(project: Project, name: Option[AliasIdentifier] = None) ex
     .projectList.map(DataSourceParserUtils.parseColumn).toArray
 
   val transformationText: String =
-    name.map(e => s"TableName: ${e.database.map(_ + ".").getOrElse("")}${e.identifier}\n").getOrElse("") +
+    name.map(e => s"TableName: ${e.database.map(_ + ".").getOrElse("")}${e.identifier.toUpperCase}\n").getOrElse("") +
       sourceColumns.map(_.printNameAndDataType).mkString("\n")
 
   val localRelationColumns: Array[SourceColumn] = project

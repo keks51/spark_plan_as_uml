@@ -13,7 +13,7 @@ case class LocalRelationSource(localRelation: LocalRelation, name: Option[AliasI
     .map(DataSourceParserUtils.parseColumn).toArray
 
   val transformationText: String =
-    name.map(e => s"TableName: ${e.database.map(_ + ".").getOrElse("")}${e.identifier}\n").getOrElse("") +
+    name.map(e => s"TableName: ${e.database.map(_ + ".").getOrElse("")}${e.identifier.toUpperCase}\n").getOrElse("") +
       sourceColumns.map(_.printNameAndDataType).mkString("\n")
 
   override val transformationName: String = CREATED_BY_CODE
