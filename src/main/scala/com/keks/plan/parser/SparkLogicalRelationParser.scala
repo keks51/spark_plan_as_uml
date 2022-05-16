@@ -19,7 +19,6 @@ class SparkLogicalRelationParser(expressionParser: ExpressionParser) {
 
   implicit val parser: ExpressionParser = expressionParser
 
-  // TODO remove parentPlan
   def parse(nodePlan: LogicalPlan,
             parentPlan: Option[LogicalPlan]): (TransformationLogicTrait, Seq[LogicalPlan]) = {
     nodePlan match {
@@ -92,9 +91,7 @@ class SparkLogicalRelationParser(expressionParser: ExpressionParser) {
         (CatalogTableTransformation(operation), nodePlan.children)
 
       case operation: With =>
-        val x = operation
-        println("fdfd")
-        null
+        throw new NotImplementedError("'With' cte is not implemented")
     }
   }
 

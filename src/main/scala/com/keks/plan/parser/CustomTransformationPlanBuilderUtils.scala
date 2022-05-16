@@ -7,6 +7,7 @@ import com.keks.plan.operations.sources.WithTableTransformation
 import java.util.concurrent.atomic.AtomicInteger
 import scala.reflect.ClassTag
 
+
 object CustomTransformationPlanBuilderUtils {
 
   /**

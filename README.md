@@ -6,7 +6,7 @@ Using PlantUML.
 
 ## Requirements
 
-spark 2.4.0 or higher\
+Tested with spark 2.4.0\
 for lower spark version some code changes should be applied\
 Not tested with Datasets
 
@@ -15,7 +15,7 @@ Not tested with Datasets
 <dependency>
     <groupId>io.github.keks51</groupId>
     <artifactId>spark-plan-as-uml</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.8</version>
 </dependency>
 ```
 ## Examples
@@ -52,8 +52,8 @@ val result = alexUsers
 PlantUml
 
 ```scala
-
-result.printPlan(parser = new DefaultExpressionParser,
+import com.keks.plan.implicits._
+result.printPlan(planParser = new SparkLogicalRelationParser(new DefaultExpressionParser()),
                  builder = new PlanUmlDiagramBuilder(),
                  entityName = s"rooms",
                  reportDescription = "find all rooms where 'alex' users live with phone_number starting with '+7952'",
@@ -66,7 +66,8 @@ result.printPlan(parser = new DefaultExpressionParser,
 JSON
 
 ```scala
-result.printPlan(parser = new DefaultExpressionParser,
+import com.keks.plan.implicits._
+result.printPlan(planParser = new SparkLogicalRelationParser(new DefaultExpressionParser()),
                  builder = new JsonDiagramBuilder(),
                  entityName = s"rooms",
                  reportDescription = "find all rooms where 'alex' users live with phone_number starting with '+7952'",

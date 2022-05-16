@@ -19,7 +19,7 @@ class JsonDiagramBuilder extends DiagramBuilder[JsonPlanType] {
       JField("reportDescription", JString(reportDescription)),
       JField("edges", jsonEdgesArray),
       JField("nodes", jsonNodesArray))
-    new JsonPlanType(json)
+    JsonPlanType(json)
   }
 
   def getEdgeAsJson(edge: (Int, Int)): JObject = {

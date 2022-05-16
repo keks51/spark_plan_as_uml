@@ -10,7 +10,6 @@ import org.apache.spark.sql.execution.datasources.csv.CSVFileFormat
 import org.apache.spark.sql.execution.datasources.json.JsonFileFormat
 import org.apache.spark.sql.execution.datasources.parquet.ParquetFileFormat
 import org.apache.spark.sql.execution.datasources.{HadoopFsRelation, LogicalRelation}
-import org.apache.spark.sql.types.DataType
 
 
 /**
@@ -256,9 +255,7 @@ class DefaultExpressionParser extends ExpressionParser {
       case Average(child) =>
         s"avg[${defaultPretty(child)}]"
       case x =>
-        val y = x
-        println("Unknown")
-        null
+        throw new NotImplementedError(s"'${x.toString}' is not implemented")
     }
   }
 
