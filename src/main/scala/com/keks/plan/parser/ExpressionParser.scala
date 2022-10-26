@@ -119,7 +119,7 @@ class DefaultExpressionParser extends ExpressionParser {
           s"$asName: ${child.dataType}"
         else
           s"${toPrettyExpression(child, rootPlan, isDataSource, withoutTableName)} as $asName"
-      case Cast(child, dataType, _) => s"${toPrettyExpression(child, rootPlan, isDataSource, withoutTableName)} cast[$dataType]"
+      case Cast(child, dataType, _, _) => s"${toPrettyExpression(child, rootPlan, isDataSource, withoutTableName)} cast[$dataType]"
       case WindowExpression(windowFunction, windowSpec) =>
         val windowFunc = s"${toPrettyExpression(windowFunction, rootPlan, isDataSource, withoutTableName)}"
         val partSpec = s"$INV3 PARTITION BY [${windowSpec.partitionSpec.map(toPrettyExpression(_, rootPlan, isDataSource, withoutTableName)).grouped(4).mkString(s"\n$INV9")}] "
@@ -128,7 +128,7 @@ class DefaultExpressionParser extends ExpressionParser {
       case rowNumber: RowNumber => rowNumber.prettyName.toUpperCase
       case SortOrder(child, direction, nullOrdering, _) =>
         toPrettyExpression(child, rootPlan, isDataSource, withoutTableName) + " " + direction.sql + nullOrdering.sql
-      case AggregateExpression(aggregateFunction, _, _, _) =>
+      case AggregateExpression(aggregateFunction, _, _, _, _) =>
         toPrettyExpression(aggregateFunction, rootPlan, isDataSource, withoutTableName)
       case Count(children) => s"Count[${children.map(toPrettyExpression(_, rootPlan, isDataSource, withoutTableName)).mkString(", ")}]"
       case SortArray(base, ascendingOrder) =>
@@ -158,7 +158,7 @@ class DefaultExpressionParser extends ExpressionParser {
         s"IS NULL[${defaultPretty(child)}]"
       case IsNotNull(child) =>
         s"IS NOT NULL[${defaultPretty(child)}]"
-      case CreateArray(children) =>
+      case CreateArray(children, _) =>
         s"CreateArrayOf[${children.map(defaultPretty)}]"
       case And(l: Expression, r: Expression) =>
         s"${toPrettyExpression(l, rootPlan, isDataSource, withoutTableName)} \n${INV3}and " +
@@ -182,11 +182,11 @@ class DefaultExpressionParser extends ExpressionParser {
         s"GreatestOf[${children.map(defaultPretty)}]"
       case Coalesce(children) =>
         s"coalesce[${children.map(defaultPretty)}]"
-      case ParseToTimestamp(left, _, _) =>
+      case ParseToTimestamp(left, _, _, _) =>
         s"to_timestamp[${defaultPretty(left)}]"
       case x: UnresolvedAttribute =>
         s"${x.name}"
-      case Sum(child) =>
+      case Sum(child, _) =>
         s"Sum[${defaultPretty(child)}]"
       case In(value, list) =>
         s"${defaultPretty(value)} IN[${list.map(defaultPretty)}]"
@@ -198,8 +198,8 @@ class DefaultExpressionParser extends ExpressionParser {
         s"${defaultPretty(child)}.${name.getOrElse("")}"
       case Contains(left, right) =>
         s"${defaultPretty(left)} Contains[${defaultPretty(right)}]"
-      case RegExpReplace(subject, regexp, rep) =>
-        s"RegexpReplace[Col=${defaultPretty(subject)},pattern=${defaultPretty(regexp)},value=`${defaultPretty(rep)}`]"
+      case RegExpReplace(subject, regexp, rep, pos) =>
+        s"RegexpReplace[Col=${defaultPretty(subject)},pattern=${defaultPretty(regexp)},value=`${defaultPretty(rep)},pos=`${defaultPretty(pos)},]"
       case StartsWith(left, right) =>
         s"${defaultPretty(left)} StartsWith[${defaultPretty(right)}]"
       case d: DenseRank =>
@@ -216,11 +216,11 @@ class DefaultExpressionParser extends ExpressionParser {
         s"Min[${defaultPretty(child)}]"
       case Max(child) =>
         s"Max[${defaultPretty(child)}]"
-      case Like(left, right) =>
+      case Like(left, right, _) =>
         s"${defaultPretty(left)} Like[${defaultPretty(right)}]"
       case x: ParseUrl =>
         s"${x.sql}"
-      case Divide(left, right) =>
+      case Divide(left, right, _) =>
         s"${defaultPretty(left)} / ${defaultPretty(right)}"
       case DateDiff(endDate, startDate) =>
         s"DateDiff[endDate=${defaultPretty(endDate)}, startDate=${defaultPretty(startDate)}]"
@@ -232,11 +232,11 @@ class DefaultExpressionParser extends ExpressionParser {
         defaultPretty(child)
       case ArrayContains(left, right) =>
         s"${defaultPretty(left)} ArrayContains[${defaultPretty(right)}]"
-      case Subtract(left, right) =>
+      case Subtract(left, right, _) =>
         s"${defaultPretty(left)} - ${defaultPretty(right)}"
-      case Add(left, right) =>
+      case Add(left, right, _) =>
         s"${defaultPretty(left)} + ${defaultPretty(right)}"
-      case Multiply(left, right) =>
+      case Multiply(left, right, _) =>
         s"${defaultPretty(left)} * ${defaultPretty(right)}"
       case Round(child, scale) =>
         s"Round[${defaultPretty(child)}, scale=${defaultPretty(scale)}]"
@@ -244,16 +244,28 @@ class DefaultExpressionParser extends ExpressionParser {
         s"Concat[${children.map(defaultPretty).mkString(", ")}]"
       case MonthsBetween(date1, date2, roundOff, _) =>
         s"MonthsBetween[date1=${defaultPretty(date1)}, date2=${defaultPretty(date2)}, roundOff=${defaultPretty(roundOff)}]"
-      case UnresolvedFunction(name, children, isDistinct) =>
+      case UnresolvedFunction(name, children, _, _ , _) =>
         s"$name[${children.map(defaultPretty).mkString(", ")}]"
-      case UnaryMinus(child) =>
+      case UnaryMinus(child, _) =>
         s"-[${defaultPretty(child)}]"
       case UnaryPositive(child) =>
         s"+[${defaultPretty(child)}]"
       case UnresolvedStar(target) =>
        s"${target.head}.*"
-      case Average(child) =>
+      case Average(child, _) =>
         s"avg[${defaultPretty(child)}]"
+      case UnixDate(child) =>
+        s"unix_date[${defaultPretty(child)}]"
+      case ParseToDate(child, _, _) =>
+        s"parse_date[${defaultPretty(child)}]"
+      case FromUnixTime(child, _, _) =>
+        s"from_unix_time[${defaultPretty(child)}]"
+      case Hour(child,_) =>
+        s"hour[${defaultPretty(child)}]"
+      case StringSplit(child, regex, limit) =>
+        s"split[${defaultPretty(child)}, ${defaultPretty(regex)}, ${defaultPretty(limit)}]"
+      case GetArrayItem(child, ordinal, failOnError) =>
+        s"get_item[${defaultPretty(child)}, ${defaultPretty(ordinal)}, $failOnError]"
       case x =>
         throw new NotImplementedError(s"'${x.toString}' is not implemented")
     }

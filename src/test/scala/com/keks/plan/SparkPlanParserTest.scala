@@ -4,11 +4,11 @@ import com.keks.plan.builder.PlanUmlDiagramBuilder
 import com.keks.plan.implicits._
 import com.keks.plan.parser.{DefaultExpressionParser, SparkLogicalRelationParser}
 import com.keks.plan.write.UmlPlanSaver
-import org.apache.spark.sql.{Encoders, Row}
-import org.apache.spark.sql.catalyst.plans.logical.{LogicalPlan, With}
+import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.catalyst.trees.Origin
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.IntegerType
+import org.apache.spark.sql.{Encoders, Row}
 import org.scalatest.Ignore
 import utils.TestBase
 

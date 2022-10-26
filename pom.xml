@@ -33,8 +33,8 @@
     </scm>
 
     <properties>
-        <scala.short.version>2.11</scala.short.version>
-        <spark.version>2.4.0</spark.version>
+        <scala.short.version>2.12</scala.short.version>
+        <spark.version>3.2.0</spark.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>1.8</maven.compiler.target>
