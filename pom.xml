@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.keks51</groupId>
-    <artifactId>spark-plan-as-uml</artifactId>
-    <version>1.0.8</version>
+    <artifactId>spark-plan-as-uml_spark_3.2_scala_2.12</artifactId>
+    <version>1.0.0</version>
 
     <name>spark-plan-as-uml</name>
     <description>visualizing spark plan as UML diagram</description>
