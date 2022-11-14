@@ -1,12 +1,13 @@
 package com.keks.plan.parser
 
-import com.keks.plan.operations.{narrow, wide, _}
-import com.keks.plan.operations.narrow.{AliasTransformation, CatalogTableTransformation, FilterTransformation, FlatMapTransformation, GenerateTransformation, MapTransformation, SelectTransformation, SkipTransformation, UnionTransformation, WithColumnsTransformation}
+import com.keks.plan.operations.narrow._
 import com.keks.plan.operations.sources.utils.DataSourceParserUtils
-import com.keks.plan.operations.sources.{CreateDataframeSource, LocalRelationSource, ToDfSource}
-import com.keks.plan.operations.wide.{AggregateTransformation, DeduplicateTransformation, DistinctTransformation, JoinTransformation, WindowTransformation}
+import com.keks.plan.operations.sources.{CreateDataframeSource, LocalRelationSource, OneRowSource, ToDfSource}
+import com.keks.plan.operations.wide._
+import com.keks.plan.operations._
 import org.apache.spark.sql.catalyst.analysis.UnresolvedRelation
 import org.apache.spark.sql.catalyst.expressions._
+import org.apache.spark.sql.catalyst.optimizer.InlineCTE
 import org.apache.spark.sql.catalyst.plans.logical._
 import org.apache.spark.sql.execution.LogicalRDD
 import org.apache.spark.sql.execution.datasources.LogicalRelation
@@ -22,6 +23,7 @@ class SparkLogicalRelationParser(expressionParser: ExpressionParser) {
   def parse(nodePlan: LogicalPlan,
             parentPlan: Option[LogicalPlan]): (TransformationLogicTrait, Seq[LogicalPlan]) = {
     nodePlan match {
+      case oneRowRelation: OneRowRelation => (OneRowSource(oneRowRelation), oneRowRelation.children)
       case deduplicate: Deduplicate => (DeduplicateTransformation(deduplicate), deduplicate.children)
       case distinct: Distinct => (DistinctTransformation(distinct), distinct.children) // TODO NOT TESTED
 
@@ -41,7 +43,7 @@ class SparkLogicalRelationParser(expressionParser: ExpressionParser) {
         else
           (FilterTransformation(filter), filter.children)
 
-      case subqueryAlias: SubqueryAlias if subqueryAlias.name.identifier == "__auto_generated_subquery_name" =>
+      case subqueryAlias: SubqueryAlias if subqueryAlias.identifier.name == "__auto_generated_subquery_name" =>
         (SkipTransformation(), subqueryAlias.children)
       case SubqueryAlias(name, p@Project(_, _: LocalRelation)) if containsOnlyAttRefOrAlias(p.projectList) =>
         (ToDfSource(p, Some(name)), p.children.flatMap(_.children))
@@ -89,9 +91,8 @@ class SparkLogicalRelationParser(expressionParser: ExpressionParser) {
 
       case operation: UnresolvedRelation =>
         (CatalogTableTransformation(operation), nodePlan.children)
-
-      case operation: With =>
-        throw new NotImplementedError("'With' cte is not implemented")
+      case View(_, _, child ) => (SkipTransformation(),Seq(child))
+      case operation: WithCTE => parse(InlineCTE(operation), parentPlan)
     }
   }
 

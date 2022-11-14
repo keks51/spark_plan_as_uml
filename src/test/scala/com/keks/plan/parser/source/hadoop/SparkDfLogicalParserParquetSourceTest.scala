@@ -144,7 +144,7 @@ class SparkDfLogicalParserParquetSourceTest extends TestBase {
     val (res, _) = planParser
       .parse(usersJsonAnalyzed, None)
     assert(res.transformationName ==  s"PARQUET_FILE_SOURCE_TABLE")
-    assert(res.asInstanceOf[HadoopSource].name.get.identifier == "USER")
+    assert(res.asInstanceOf[HadoopSource].name.get.name == "USER")
   }
 
 

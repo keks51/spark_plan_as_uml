@@ -32,7 +32,7 @@ object UnknownSource {
       .map(e => DataSourceParserUtils.parseColumn(e)).toArray
     val transformationName: String = s"${sourceFilesInfo.name.toUpperCase}"
     val transformationText: String =
-      name.map(e => s"TableName: ${e.database.map(_ + ".").getOrElse("")}${e.identifier.toUpperCase}\n").getOrElse("") +
+      name.map(e => s"TableName: ${e.name}\n").getOrElse("") +
         sourceColumns.map(_.printNameAndDataType).mkString("\n")
         new UnknownSource(logical, name, sourceFilesInfo, sourceColumns, transformationName, transformationText)
   }

@@ -13,18 +13,6 @@ class SparkDfLogicalParserCreateDataFrameSourceTest extends TestBase {
   val planParser = new SparkLogicalRelationParser(new DefaultExpressionParser())
 
 
-/* LogicalRDD false */
-  "CreateDataFrameSource" should "test1" in {
-    val usersAnalyzed = spark
-      .emptyDataFrame
-      .queryExecution
-      .analyzed
-
-    val (datasource, _) = planParser.parse(usersAnalyzed, None)
-    assert(datasource.isInstanceOf[CreateDataframeSource])
-  }
-
-
 /* LogicalRDD [id#4, name#5], false */
   "CreateDataFrameSource" should "test2" in {
     val schema = Encoders.product[User].schema

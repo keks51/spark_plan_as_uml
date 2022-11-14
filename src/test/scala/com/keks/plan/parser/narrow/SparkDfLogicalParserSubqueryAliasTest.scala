@@ -4,8 +4,8 @@ import com.keks.plan.operations.narrow.AliasTransformation
 import com.keks.plan.operations.{CREATED_BY_CODE, TABLE_ALIAS}
 import com.keks.plan.parser.source.User
 import com.keks.plan.parser.{DefaultExpressionParser, SparkLogicalRelationParser}
-import org.apache.spark.sql.{Encoders, Row}
 import org.apache.spark.sql.functions.col
+import org.apache.spark.sql.{Encoders, Row}
 import utils.TestBase
 
 class SparkDfLogicalParserSubqueryAliasTest extends TestBase {

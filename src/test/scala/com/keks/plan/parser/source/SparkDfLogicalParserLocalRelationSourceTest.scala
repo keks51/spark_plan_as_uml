@@ -12,7 +12,6 @@ class SparkDfLogicalParserLocalRelationSourceTest extends TestBase {
 
   val planParser = new SparkLogicalRelationParser(new DefaultExpressionParser())
 
-
 /* LocalRelation [id#2, name#3] */
   "LocalRelationSource" should "test1" in {
 
@@ -43,6 +42,17 @@ class SparkDfLogicalParserLocalRelationSourceTest extends TestBase {
     val expectedAlias = AliasIdentifier("USER")
 
     assert(expectedAlias == alias)
+  }
+
+  /* LocalRelation <empty> false */
+  "LocalRelationSource" should "test3" in {
+    val usersAnalyzed = spark
+      .emptyDataFrame
+      .queryExecution
+      .analyzed
+
+    val (datasource, _) = planParser.parse(usersAnalyzed, None)
+    assert(datasource.isInstanceOf[LocalRelationSource])
   }
 
 }
